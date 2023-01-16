@@ -20,5 +20,5 @@ terraform {
 resource "aws_instance" "ubuntu" {
   ami           = "ami-06878d265978313ca"
   instance_type = "t2.micro"
-  subnet_id     = "subnet-09a1d2e51ea27438d"
+  subnet_id     = "subnet-00648c056a82ad54c"
 }
