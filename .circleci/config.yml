@@ -5,7 +5,9 @@ workflows:
   deploy_infrastructure:
     jobs:
       - build
-      - test
+      - test:
+          requires:
+            - build
       # - packages
       - terraform/fmt:
           checkout: true
@@ -59,7 +61,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: npm run test
+      - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - persist_to_workspace:
           root: .
           paths:
