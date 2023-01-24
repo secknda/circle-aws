@@ -4,10 +4,11 @@ orbs:
 workflows:
   deploy_infrastructure:
     jobs:
-      - test
-      - build:
+      
+      - build
+      - test:
           requires:
-            - test
+            - build
       # - packages
       - terraform/fmt:
           checkout: true
@@ -49,7 +50,7 @@ jobs:
           version: 20.10.14
       - checkout
       - run: npm install
-      - run: npm run build
+      # - run: npm run build
       # - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
       - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
