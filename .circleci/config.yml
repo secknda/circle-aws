@@ -59,15 +59,15 @@ jobs:
       - run: docker push $DOCKER_LOGIN/my-angular-app
   test:
     docker:
-      - image: cimg/node:16.10
+      - image: circleci/node
     steps:
       - run: 
           name: Install Chrome
           command: |
               apt-get update
               apt-get install -y google-chrome-stable
-      - run: echo 'export CHROME_BIN=/usr/bin/google-chrome-stable' >> $BASH_ENV
-      - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - run: sudo echo 'export CHROME_BIN=/usr/bin/google-chrome-stable' >> $BASH_ENV
+      - run: sudo npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
 
 
   terraform/fmt:
