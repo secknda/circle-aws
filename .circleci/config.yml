@@ -40,8 +40,8 @@ workflows:
 
 jobs:
   build:
-    environment:
-      CHROME_BIN: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    # environment:
+    #   CHROME_BIN: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
     docker:
       - image: cimg/node:16.10
     # parallelism: 4
@@ -51,6 +51,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
+      - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
       - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - run: docker build -t my-angular-app .
