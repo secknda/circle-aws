@@ -5,6 +5,8 @@ workflows:
   deploy_infrastructure:
     jobs:
       - build
+      - test
+      - packages
       - terraform/fmt:
           checkout: true
           context: terraform
@@ -45,6 +47,23 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
+  
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout
+      - run: npm run test
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  packages:
+    docker:
+      - image: cimg/node:16.10
+    steps:
       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - run: docker build -t my-angular-app .
       - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
