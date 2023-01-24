@@ -4,10 +4,10 @@ orbs:
 workflows:
   deploy_infrastructure:
     jobs:
-      - build
-      # - test:
-      #     requires:
-      #       - build
+      - test
+      - build:
+          requires:
+            - test
       # - packages
       - terraform/fmt:
           checkout: true
@@ -40,8 +40,8 @@ workflows:
 
 jobs:
   build:
-    # environment:
-    #   CHROME_BIN: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    environment:
+      CHROME_BIN: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
     docker:
       - image: cimg/node:16.10
     # parallelism: 4
@@ -57,19 +57,17 @@ jobs:
       - run: docker build -t my-angular-app .
       - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
       - run: docker push $DOCKER_LOGIN/my-angular-app
-  
-  # test:
-  #   docker:
-  #     - image: cimg/node:16.10
-  #   steps:
-  #     - attach_workspace:
-  #         at: .
-  #     - checkout
-  #     - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths:
-  #           - .
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - run: 
+          name: Install Chrome
+          command: |
+              apt-get update
+              apt-get install -y google-chrome-stable
+      - run: echo 'export CHROME_BIN=/usr/bin/google-chrome-stable' >> $BASH_ENV
+      - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
 
 
   terraform/fmt:
