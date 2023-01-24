@@ -75,6 +75,7 @@ orbs:
 workflows:
   deploy_infrastructure:
     jobs:
+      - build
       - terraform/fmt:
           checkout: true
           context: terraform
@@ -97,3 +98,16 @@ workflows:
               only: main
           requires:
             - terraform/plan
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.10
+    parallelism: 4
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run build
+      - run: docker build -t my-angular-app .
+      - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
+      - run: docker push $DOCKER_LOGIN/my-angular-app
