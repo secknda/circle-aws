@@ -50,7 +50,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
-      - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
+      # - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
       - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - run: docker build -t my-angular-app .
@@ -65,6 +65,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
+      - run : npm install -g @angular/cli
       - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - persist_to_workspace:
           root: .
