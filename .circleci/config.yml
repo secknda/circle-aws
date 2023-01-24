@@ -29,10 +29,10 @@ workflows:
               only: main
           requires:
             - terraform/plan
-      - deploy-app:
-          context: terraform
-          requires:
-            - terraform/apply
+      # - deploy-app:
+      #     context: terraform
+      #     requires:
+      #       - terraform/apply
 
 jobs:
   build:
@@ -71,8 +71,8 @@ jobs:
     steps:
       - run: terraform apply
 
-  deploy-app:
-    docker:
-      - image: cimg/node:16.10
-    steps:
-      - run: ssh -i ~/projet/pk_UBUNTU.pem terraform@$EC2_PUBLIC_IP "docker stack deploy -c ~/project/docker-compose.yml my-angular-app"
+  # deploy-app:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - run: ssh -i ~/projet/pk_UBUNTU.pem terraform@$EC2_PUBLIC_IP "docker stack deploy -c ~/project/docker-compose.yml my-angular-app"
