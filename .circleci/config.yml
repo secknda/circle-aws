@@ -1,3 +1,74 @@
+# version: 2.1
+# orbs:
+#   docker: circleci/docker@1.4.0
+#   swarmpit: topmonks/swarmpit@1.0.0
+
+# workflows:
+#   build_and_deploy:
+#     jobs:
+#       - build
+#       - docker_deploy:
+#           context: org-swarmpit
+#           filters:
+#             branches:
+#               only: trunk
+
+# # workflows:
+# #   build-and-provision:
+# #     jobs:
+      
+# #       - deploy-to-swarm
+# #           # requires:
+# #           #   - build
+
+# jobs:
+#   build:
+#     docker:
+#       - image: cimg/node:16.10
+#         # auth:
+#         #     username: seckndanane
+#         #     password: Babacar98
+#     steps:
+#       - setup_remote_docker:
+#           version: 20.10.14
+#       - checkout
+#       - run: npm install
+#       - run: npm run build
+#       # - run: npm test --watch=false
+#       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+#       - run: docker build -t my-angular-app .
+#       - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
+#       - run: docker push $DOCKER_LOGIN/my-angular-app
+#   docker_deploy:
+#     executor: docker/docker
+#     steps:
+#       - setup_remote_docker
+#       - checkout
+#       - docker/check
+#       - docker/push:
+#           image: my-org/my-service
+#           tag: latest
+#       - swarmpit/deploy_stack:
+#           stack_name: my-service
+
+#   # deploy-to-swarm:
+#   #   steps:
+#   #     - run: 
+#   #         name: Deploy with Terraform
+#   #         command: terraform init -input=false && terraform apply -input=false -auto-approve
+#   #     - run:
+#   #         name: Deploy with Docker Swarm
+#   #         command: export DOCKER_HOST=$(terraform output swarm_manager_public_ip):2376 && docker stack deploy --compose-file=docker-compose.yml myapp
+
+
+
+
+
+
+
+
+
+
 version: 2.1
 orbs:
   terraform: circleci/terraform@3.1
