@@ -40,8 +40,7 @@ workflows:
 
 jobs:
   build:
-    environment:
-      CHROME_BIN: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    
     docker:
       - image: cimg/node:16.10
     # parallelism: 4
@@ -58,18 +57,19 @@ jobs:
       - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
       - run: docker push $DOCKER_LOGIN/my-angular-app
   test:
+    environment:
+      CHROME_BIN: /usr/bin/google-chrome-stable
     docker:
-      - image: circleci/node
+      - image: cimg/node:16.10
     steps:
-      - run: 
-          name: Install Chrome
-          command: |
-              apt-get update
-              apt-get install -y google-chrome-stable
-      - run: sudo echo 'export CHROME_BIN=/usr/bin/google-chrome-stable' >> $BASH_ENV
-      - run: sudo npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
-
-
+      - attach_workspace:
+          at: .
+      - checkout
+      - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   terraform/fmt:
     docker:
       - image: hashicorp/terraform:latest
