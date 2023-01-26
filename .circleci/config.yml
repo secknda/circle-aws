@@ -49,14 +49,26 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
       - checkout
-      - run: npm install
-      - run: npm run build
+      - run: 
+          name: Install
+          command: npm install
+      - run: 
+          name: Build Project
+          command: npm run build
       # - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
       # - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-      - run: docker build -t my-angular-app .
-      - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
-      - run: docker push $DOCKER_LOGIN/my-angular-app
+      - run: 
+          name: Connnect to Docker
+          command: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+      - run: 
+          name: Build the image
+          command: docker build -t my-angular-app .
+      - run:
+          name: Tag the image
+          command: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
+      - run: 
+          name: Push The image to Docker Hub
+          command: docker push $DOCKER_LOGIN/my-angular-app
   test:
     environment:
       CHROME_BIN: /usr/bin/google-chrome-stable
@@ -66,7 +78,9 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run : npm install -g @angular/cli
+      - run :
+          name: Install Angular Cli
+          command: npm install -g @angular/cli
       - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - persist_to_workspace:
           root: .
@@ -76,22 +90,30 @@ jobs:
     docker:
       - image: hashicorp/terraform:latest
     steps:
-      - run: terraform fmt -check=true -diff=true
+      - run: 
+          name: Terraform fmt
+          command: terraform fmt -check=true -diff=true
   terraform/validate:
     docker:
       - image: hashicorp/terraform:latest
     steps:
-      - run: terraform validate
+      - run: 
+          name: Terraform Validate
+          command: terraform validate
   terraform/plan:
     docker:
       - image: hashicorp/terraform:latest
     steps:
-      - run: terraform plan
+      - run: 
+          name: Terraform plan
+          command: terraform plan
   terraform/apply:
     docker:
       - image: hashicorp/terraform:latest
     steps:
-      - run: terraform apply
+      - run: 
+          name: Terraform Apply
+          command: terraform apply -var 'docker_image_version=my-angular-app:latest'
 
   # deploy-app:
   #   docker:
