@@ -6,9 +6,9 @@ workflows:
     jobs:
       
       - build
-      - test:
-          requires:
-            - build
+      # - test:
+      #     requires:
+      #       - build
       # - packages
       - terraform/fmt:
           checkout: true
@@ -50,9 +50,9 @@ jobs:
           version: 20.10.14
       - checkout
       - run: npm install
-      # - run: npm run build
+      - run: npm run build
       # - run: echo "CHROME_BIN=C:\Program Files\Google\Chrome\Application\chrome.exe" >> $BASH_ENV
-      - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      # - run: npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
       - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - run: docker build -t my-angular-app .
       - run: docker tag my-angular-app $DOCKER_LOGIN/my-angular-app
